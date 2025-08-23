@@ -85,6 +85,54 @@ const majminTotal = document.getElementById('majmin-total');
 const majminAccuracy = document.getElementById('majmin-accuracy');
 const majminReset = document.getElementById('majmin-reset');
 const backFromMajMin = document.getElementById('back-to-home-from-majmin');
+// ---- D7/M7 INTRO (new) ----
+const d7m7IntroScreen   = document.getElementById('d7m7-intro');
+const d7m7IntroHomeBtn  = document.getElementById('d7m7-intro-home');
+const d7m7BeginBtn      = document.getElementById('d7m7-begin');
+const d7m7IntroRefDom   = document.getElementById('d7m7-intro-ref-dom');
+const d7m7IntroRefMaj   = document.getElementById('d7m7-intro-ref-maj');
+
+
+// ================================
+// Dominant 7th or Major 7th? NEW
+// ================================
+const d7m7MenuBtn   = document.getElementById('d7m7-menu-btn');
+const d7m7Screen    = document.getElementById('d7m7-game');
+const d7m7HomeBtn   = document.getElementById('d7m7-home');
+
+const d7m7RefDomBtn = document.getElementById('d7m7-ref-dom');
+const d7m7RefMajBtn = document.getElementById('d7m7-ref-maj');
+
+const d7m7PlayBtn   = document.getElementById('d7m7-play');
+const d7m7NextBtn   = document.getElementById('d7m7-next');
+
+const d7m7AnsDomBtn = document.getElementById('d7m7-answer-dom');
+const d7m7AnsMajBtn = document.getElementById('d7m7-answer-maj');
+
+const d7m7Feedback  = document.getElementById('d7m7-feedback');
+
+const d7m7Correct   = document.getElementById('d7m7-correct');
+const d7m7Incorrect = document.getElementById('d7m7-incorrect');
+const d7m7Total     = document.getElementById('d7m7-total');
+const d7m7Accuracy  = document.getElementById('d7m7-accuracy');
+const d7m7Reset     = document.getElementById('d7m7-reset');
+// ---- D7/M7 "More Information" screen ----
+const d7m7MoreInfoBtn       = document.getElementById('d7m7-moreinfo');
+const d7m7StructureScreen   = document.getElementById('d7m7-structure');
+const d7m7StructureHomeBtn  = document.getElementById('d7m7-structure-home');
+const d7m7StructureBackBtn  = document.getElementById('d7m7-structure-back');
+
+
+// dedicated audio channels
+let d7m7Audio = new Audio();
+let d7m7FeedbackAudio = new Audio();
+
+// state
+let d7m7CurrentType = null;      // 'dom' or 'maj'
+let d7m7CurrentFile = '';        // filename including .mp3
+let d7m7Locked = false;
+const d7m7Score = { correct: 0, incorrect: 0 };
+
 
 // ================================
 // Major or Minor Scale?  (NEW)
@@ -123,6 +171,7 @@ function mosStopFeedbackAudio() {     // NEW: stop feedback audio on any other c
 }
 
 
+
 const mosScore = { correct: 0, incorrect: 0 };
 
 // Utility
@@ -142,6 +191,397 @@ function mosStopAudio() {
     mosAudio.currentTime = 0;
   }
 }
+
+function playUiSound(filename) {
+  try {
+    const a = new Audio(`audio/${filename}`);
+    a.play();
+  } catch (e) {
+    // silently ignore if audio can't play
+  }
+}
+
+/* ================================
+ * Intervals (IVL) – namespaced
+ * ================================ */
+
+const ivlMenuBtn        = document.getElementById('intervals-menu-btn');
+const ivlIntro          = document.getElementById('ivl-intro');
+const ivlSelect         = document.getElementById('ivl-select');
+const ivlGame           = document.getElementById('ivl-game');
+
+const ivlHomeFromIntro  = document.getElementById('ivl-home-from-intro');
+const ivlHomeFromSelect = document.getElementById('ivl-home-from-select');
+const ivlHomeFromGame   = document.getElementById('ivl-home-from-game');
+
+const ivlBackToIntro    = document.getElementById('ivl-back-to-intro');
+const ivlBackToSelect   = document.getElementById('ivl-back-to-select');
+
+const ivlBegin          = document.getElementById('ivl-begin');
+const ivlCountButtons   = document.querySelectorAll('.ivl-mode-button');
+
+const ivlPlayBtn        = document.getElementById('ivl-play');
+const ivlNextBtn        = document.getElementById('ivl-next');
+const ivlPrompt         = document.getElementById('ivl-prompt');
+const ivlFeedback       = document.getElementById('ivl-feedback');
+const ivlAnswerContainer = document.getElementById('ivl-answer-buttons');
+
+const ivlRemoveBtn      = document.getElementById('ivl-remove');
+const ivlAddBtn         = document.getElementById('ivl-add');
+const ivlCountLabel     = document.getElementById('ivl-count-label');
+
+const ivlCorrect        = document.getElementById('ivl-correct');
+const ivlIncorrect      = document.getElementById('ivl-incorrect');
+const ivlTotal          = document.getElementById('ivl-total');
+const ivlAccuracy       = document.getElementById('ivl-accuracy');
+const ivlReset          = document.getElementById('ivl-reset');
+
+// dedicated audio
+let ivlAudio1 = new Audio();
+let ivlAudio2 = new Audio();
+let ivlFeedbackAudio = new Audio();
+
+function ivlStopAllAudio() {
+  try { if (ivlAudio1 && !ivlAudio1.paused) { ivlAudio1.pause(); ivlAudio1.currentTime = 0; } } catch(e){}
+  try { if (ivlAudio2 && !ivlAudio2.paused) { ivlAudio2.pause(); ivlAudio2.currentTime = 0; } } catch(e){}
+  try { if (ivlFeedbackAudio && !ivlFeedbackAudio.paused) { ivlFeedbackAudio.pause(); ivlFeedbackAudio.currentTime = 0; } } catch(e){}
+}
+
+// --------------------
+// Data + state
+// --------------------
+const IVL_ALL = [
+  { code:'P1',   name:'perfect unison', semitones:0  },
+  { code:'m2',   name:'minor second',   semitones:1  },
+  { code:'M2',   name:'major second',   semitones:2  },
+  { code:'m3',   name:'minor third',    semitones:3  },
+  { code:'M3',   name:'major third',    semitones:4  },
+  { code:'P4',   name:'perfect fourth', semitones:5  },
+  { code:'A4/d5',name:'tritone',        semitones:6  },
+  { code:'P5',   name:'perfect fifth',  semitones:7  },
+  { code:'m6',   name:'minor sixth',    semitones:8  },
+  { code:'M6',   name:'major sixth',    semitones:9  },
+  { code:'m7',   name:'minor seventh',  semitones:10 },
+  { code:'M7',   name:'major seventh',  semitones:11 },
+  { code:'P8',   name:'perfect octave', semitones:12 },
+];
+
+let ivlCount = 13; // how many of the FIRST intervals are active (3..13)
+let ivlBuilt = false;
+
+const IVL_MIN_COUNT = 3;
+const IVL_MAX_COUNT = 13;
+
+// Range boundaries (inclusive)
+const IVL_MIN_NOTE = 'g3';
+const IVL_MAX_NOTE = 'g5';
+
+// Score
+const ivlScore = { correct: 0, incorrect: 0 };
+
+// Current question
+let ivlCurrent = {
+  low: '', high: '', // 'c4' style, lowercase
+  interval: IVL_ALL[0] // object from IVL_ALL
+};
+
+// --------------------
+// Helpers
+// --------------------
+const IVL_PC = ['c','c#','d','d#','e','f','f#','g','g#','a','a#','b'];
+
+function ivlMidi(note) {
+  const m = note.match(/^([a-g]#?)(\d)$/i);
+  if (!m) return 0;
+  const pc = m[1].toLowerCase();
+  const oct = parseInt(m[2], 10);
+  const base = {c:0,d:2,e:4,f:5,g:7,a:9,b:11}[pc[0]];
+  const sharp = pc.includes('#') ? 1 : 0;
+  return 12 * (oct + 1) + base + sharp; // same mapping your app uses elsewhere; local name to avoid collisions :contentReference[oaicite:6]{index=6}
+}
+
+function ivlFromMidi(m) {
+  const oct = Math.floor(m/12) - 1;
+  const pc  = m % 12;
+  return `${IVL_PC[pc]}${oct}`;
+}
+
+function ivlUpdateScore() {
+  const total = ivlScore.correct + ivlScore.incorrect;
+  ivlCorrect.textContent = ivlScore.correct;
+  ivlIncorrect.textContent = ivlScore.incorrect;
+  ivlTotal.textContent = total;
+  ivlAccuracy.textContent = total ? ((ivlScore.correct / total) * 100).toFixed(1) + '%' : '0.0%';
+}
+
+function ivlSetFeedback(t) { ivlFeedback.textContent = t; }
+
+function ivlEnableAnswers(enable) {
+  const btns = ivlAnswerContainer.querySelectorAll('.ivl-answer');
+  btns.forEach(b => {
+    b.disabled = !enable;
+    b.classList.remove('correct','incorrect');
+  });
+}
+
+// --------------------
+// Build / refresh answers
+// --------------------
+function ivlBuildAnswersIfNeeded() {
+  if (ivlBuilt) return;
+  ivlAnswerContainer.innerHTML = '';
+  IVL_ALL.forEach((itv, idx) => {
+    const b = document.createElement('button');
+    b.className = 'ivl-green-button ivl-answer wide-answer-button';
+    b.textContent = itv.code;
+    b.setAttribute('data-index', String(idx));
+    ivlAnswerContainer.appendChild(b);
+  });
+  // Set listeners once
+  ivlAnswerContainer.querySelectorAll('.ivl-answer').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (!ivlNextBtn.disabled) return; // already answered
+      const idx = parseInt(btn.getAttribute('data-index'));
+      const guess = IVL_ALL[idx];
+
+      // Stop interval playback
+      ivlStopAllAudio();
+
+      // lock answers
+      ivlEnableAnswers(false);
+
+      // Disable Play until Next (your requirement)
+      ivlPlayBtn.disabled = true;
+
+      const correct = (guess.code === ivlCurrent.interval.code);
+      const low = ivlCurrent.low;
+      const high = ivlCurrent.high;
+      const niceName = ivlCurrent.interval.name;
+      const short = ivlCurrent.interval.code;
+
+      if (correct) {
+        ivlScore.correct++;
+        btn.classList.add('correct');
+        ivlSetFeedback(`Correct! ✅ The two notes were '${low}' and '${high}', which make an interval of a ${niceName} (${short}).`);
+        ivlFeedbackAudio.src = 'audio/correct1.mp3';
+      } else {
+        ivlScore.incorrect++;
+        btn.classList.add('incorrect');
+        // also mark the correct one
+        const correctIdx = IVL_ALL.findIndex(x => x.code === ivlCurrent.interval.code);
+        const correctBtn = ivlAnswerContainer.querySelector(`.ivl-answer[data-index="${correctIdx}"]`);
+        if (correctBtn) correctBtn.classList.add('correct');
+        ivlSetFeedback(`Incorrect! ❌ The two notes were '${low}' and '${high}', which make an interval of a ${niceName} (${short}).`);
+        ivlFeedbackAudio.src = 'audio/incorrect1.mp3';
+      }
+      ivlFeedbackAudio.play();
+
+      ivlUpdateScore();
+      ivlNextBtn.disabled = false;
+      ivlNextBtn.classList.add('pop-animation');
+      setTimeout(() => ivlNextBtn.classList.remove('pop-animation'), 300);
+    });
+  });
+  ivlBuilt = true;
+}
+
+function ivlRefreshAnswerVisibility() {
+  const btns = ivlAnswerContainer.querySelectorAll('.ivl-answer');
+  btns.forEach((b, i) => {
+    b.style.display = (i < ivlCount) ? '' : 'none';
+  });
+  ivlCountLabel.textContent = String(ivlCount);
+}
+
+// --------------------
+// Round generation
+// --------------------
+function ivlNewRound() {
+  ivlStopAllAudio();
+
+  ivlSetFeedback('Awaiting your answer...');
+  ivlEnableAnswers(true);
+
+  // Next stays disabled until you answer (matches other modes)
+  ivlNextBtn.disabled = true;
+
+  // Play enabled at the start of a round
+  ivlPlayBtn.disabled = false;
+
+  // pick a random interval from the ACTIVE front slice
+  const list = IVL_ALL.slice(0, ivlCount);
+  const itv = list[Math.floor(Math.random() * list.length)];
+  const d = itv.semitones;
+
+  // choose a low note so that high <= g5 and low >= g2
+  const minM = ivlMidi(IVL_MIN_NOTE);
+  const maxM = ivlMidi(IVL_MAX_NOTE);
+  const lowMin = minM;
+  const lowMax = maxM - d;
+
+  let lowM = lowMin;
+  if (lowMax >= lowMin) {
+    const span = lowMax - lowMin + 1;
+    lowM = lowMin + Math.floor(Math.random() * span);
+  }
+  const highM = lowM + d;
+
+  // Build names (always lowercase, URL-encode # on play)
+  const lowName  = ivlFromMidi(lowM);
+  const highName = ivlFromMidi(highM);
+
+  // For P1: second is the same (still valid)
+  ivlCurrent = { low: lowName, high: highName, interval: itv };
+}
+
+// --------------------
+// Playback
+// --------------------
+function ivlPlayInterval() {
+  // Safety: if both notes weren’t generated yet
+  if (!ivlCurrent.low || !ivlCurrent.high) return;
+
+  const f1 = `audio/${encodeURIComponent(ivlCurrent.low)}.mp3`;
+const f2 = `audio/${encodeURIComponent(ivlCurrent.high)}.mp3`;
+
+  ivlStopAllAudio();
+  ivlAudio1 = new Audio(f1);
+  ivlAudio2 = new Audio(f2);
+
+  // preload then play sequentially (mirrors your comparison game timing) :contentReference[oaicite:7]{index=7}
+  Promise.all([
+    new Promise(res => { ivlAudio1.oncanplaythrough = res; ivlAudio1.load(); }),
+    new Promise(res => { ivlAudio2.oncanplaythrough = res; ivlAudio2.load(); }),
+  ]).then(() => {
+    setTimeout(() => {
+      ivlAudio1.play();
+      setTimeout(() => ivlAudio2.play(), 900);
+    }, 200);
+  });
+}
+
+// --------------------
+// Adjust controls
+// --------------------
+function ivlUpdateAdjustButtonsState() {
+  ivlRemoveBtn.disabled = (ivlCount <= IVL_MIN_COUNT);
+  ivlAddBtn.disabled    = (ivlCount >= IVL_MAX_COUNT);
+}
+
+ivlRemoveBtn && ivlRemoveBtn.addEventListener('click', () => {
+  if (ivlCount > IVL_MIN_COUNT) {
+    ivlCount--;
+    ivlRefreshAnswerVisibility();
+    ivlUpdateAdjustButtonsState();
+    // reset question to respect new set
+    ivlNewRound();
+  }
+});
+
+ivlAddBtn && ivlAddBtn.addEventListener('click', () => {
+  if (ivlCount < IVL_MAX_COUNT) {
+    ivlCount++;
+    ivlRefreshAnswerVisibility();
+    ivlUpdateAdjustButtonsState();
+    ivlNewRound();
+  }
+});
+
+// --------------------
+// Buttons & Navigation
+// --------------------
+ivlPlayBtn && ivlPlayBtn.addEventListener('click', () => {
+  ivlPlayInterval();
+});
+
+ivlNextBtn && ivlNextBtn.addEventListener('click', () => {
+  ivlNewRound();          // sets up low/high + enables Play for the new round
+  ivlPlayInterval();      // 👈 auto-play immediately so the user doesn’t have to press Play
+});
+
+
+// Score reset
+ivlReset && ivlReset.addEventListener('click', () => {
+  ivlScore.correct = 0;
+  ivlScore.incorrect = 0;
+  ivlUpdateScore();
+});
+
+// Menu button (from home)
+ivlMenuBtn && ivlMenuBtn.addEventListener('click', () => {
+  hideAllScreens();
+  ivlIntro.classList.remove('hidden');
+  window.scrollTo(0, 0);
+});
+
+// Intro -> Select
+ivlBegin && ivlBegin.addEventListener('click', () => {
+  hideAllScreens();
+  ivlSelect.classList.remove('hidden');
+  window.scrollTo(0, 0);
+});
+
+// Select a count -> Game
+ivlCountButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    ivlCount = parseInt(btn.getAttribute('data-count'), 10);
+    hideAllScreens();
+    ivlGame.classList.remove('hidden');
+    window.scrollTo(0, 0);
+
+    ivlBuildAnswersIfNeeded();
+    ivlRefreshAnswerVisibility();
+    ivlUpdateAdjustButtonsState();
+    ivlUpdateScore();
+
+    // start a fresh question
+    ivlNewRound();
+  });
+});
+
+// Back/Home (all back buttons play back1.mp3)
+function ivlGoHome() {
+  ivlStopAllAudio();
+  hideAllScreens();
+  document.getElementById('main-menu').classList.remove('hidden');
+  window.scrollTo(0, 0);
+}
+
+[ivlHomeFromIntro, ivlHomeFromSelect, ivlHomeFromGame].forEach(b => {
+  b && b.addEventListener('click', ivlGoHome);
+});
+
+ivlBackToIntro && ivlBackToIntro.addEventListener('click', () => {
+  ivlStopAllAudio();
+  playUiSound('back1.mp3');
+  hideAllScreens();
+  ivlIntro.classList.remove('hidden');
+  window.scrollTo(0, 0);
+});
+
+ivlBackToSelect && ivlBackToSelect.addEventListener('click', () => {
+  ivlStopAllAudio();
+  playUiSound('back1.mp3');
+  hideAllScreens();
+  ivlSelect.classList.remove('hidden');
+  window.scrollTo(0, 0);
+});
+
+// -----------------------------------------------------
+// Integrate with your existing hideAllScreens() safely:
+// add the new screens to the list + stop our audio too.
+// -----------------------------------------------------
+(function patchHideAllScreensForIVL(){
+  const _orig = hideAllScreens;
+  window.hideAllScreens = function() {
+    try { ivlStopAllAudio(); } catch(e){}
+    _orig.call(window);
+    // Also hide our screens explicitly in case your ID list changes elsewhere:
+    [ivlIntro, ivlSelect, ivlGame].forEach(el => el && el.classList.add('hidden'));
+  };
+})();
+
+
 
 function mosSetFeedback(text) {
   mosFeedback.textContent = text;
@@ -428,33 +868,50 @@ let inChordMode = false;
 let selectedChordScale = '';
 let playRefBtn = document.getElementById('play-reference');
 function hideAllScreens() {
-  // Stop any currently playing audio
-  if (!audio.paused) {
-    audio.pause();
-    audio.currentTime = 0;
-    document.getElementById('scale-diagram').classList.add('hidden');
-    try { if (mosFeedbackAudio && !mosFeedbackAudio.paused) { mosFeedbackAudio.pause(); mosFeedbackAudio.currentTime = 0; } } catch(e) {}
+  // Stop any currently playing audio (null-safe)
+  try { if (typeof audio !== 'undefined' && audio && !audio.paused) { audio.pause(); audio.currentTime = 0; } } catch (e) {}
+  try { if (typeof mosFeedbackAudio !== 'undefined' && mosFeedbackAudio && !mosFeedbackAudio.paused) { mosFeedbackAudio.pause(); mosFeedbackAudio.currentTime = 0; } } catch (e) {}
+  try { if (typeof mosAudio !== 'undefined' && mosAudio && !mosAudio.paused) { mosAudio.pause(); mosAudio.currentTime = 0; } } catch (e) {}
+  try { if (typeof chordVisualAudio !== 'undefined' && chordVisualAudio && !chordVisualAudio.paused) { chordVisualAudio.pause(); chordVisualAudio.currentTime = 0; } } catch (e) {}
+  try { if (typeof d7m7Audio !== 'undefined' && d7m7Audio && !d7m7Audio.paused) { d7m7Audio.pause(); d7m7Audio.currentTime = 0; } } catch (e) {}
+  try { if (typeof d7m7FeedbackAudio !== 'undefined' && d7m7FeedbackAudio && !d7m7FeedbackAudio.paused) { d7m7FeedbackAudio.pause(); d7m7FeedbackAudio.currentTime = 0; } } catch (e) {}
+  
 
+  // Hide the scale diagram if present
+  (function(){ const d = document.getElementById('scale-diagram'); if (d) d.classList.add('hidden'); })();
+
+  // Hide all known screens (null-safe; doesn't care if some are missing)
+  const __ids = [
+    'main-menu',
+    'major-scale-menu',
+    'chromatic-scale-menu',
+    'mode-select-screen',
+    'game-screen',
+    'about-page',
+    'comparison-game',
+    'chord-mode-select',
+    'chord-scale-menu',
+    'major-minor-game',
+    'majmin-select-screen',
+    'quick-counting-select-screen',
+    'quick-counting-game',
+    'really-quick-counting-select-screen',
+    'really-quick-counting-game',
+    'chord-visual-select-screen',
+    'chord-visual-game',
+    'mos-game',
+    'd7m7-game',
+    'd7m7-intro',
+    'd7m7-structure',
+    'ivl-intro',
+'ivl-select',
+'ivl-game',
+    
+  ];
+  for (const id of __ids) {
+    const el = document.getElementById(id);
+    if (el && !el.classList.contains('hidden')) el.classList.add('hidden');
   }
-
-  document.getElementById('main-menu').classList.add('hidden');
-  document.getElementById('major-scale-menu').classList.add('hidden');
-  document.getElementById('chromatic-scale-menu').classList.add('hidden');
-  document.getElementById('mode-select-screen').classList.add('hidden');
-  document.getElementById('game-screen').classList.add('hidden');
-  document.getElementById('about-page').classList.add('hidden');
-  document.getElementById('comparison-game').classList.add('hidden');
-  document.getElementById('chord-mode-select').classList.add('hidden');
-  document.getElementById('major-minor-game').classList.add('hidden');
-  document.getElementById('majmin-select-screen').classList.add('hidden');
-  document.getElementById('quick-counting-select-screen').classList.add('hidden');
-  document.getElementById('quick-counting-game').classList.add('hidden');
-  document.getElementById('really-quick-counting-select-screen').classList.add('hidden');
-document.getElementById('really-quick-counting-game').classList.add('hidden');
-document.getElementById('chord-visual-select-screen').classList.add('hidden');
-document.getElementById('chord-visual-game').classList.add('hidden');
-document.getElementById('mos-game').classList.add('hidden');
-  try { if (mosAudio && !mosAudio.paused) { mosAudio.pause(); mosAudio.currentTime = 0; } } catch(e) {}
 }
 
   const scaleData = {
@@ -978,6 +1435,151 @@ if ((currentScale === "Chromatic" || currentScale === "ChromaticExtended") && !s
     nextReallyQuickBtn.classList.add('pop-animation');
     setTimeout(() => nextReallyQuickBtn.classList.remove('pop-animation'), 300);
   }
+
+  function d7m7Stop(audioEl) {
+    try {
+      if (audioEl && !audioEl.paused) {
+        audioEl.pause();
+        audioEl.currentTime = 0;
+      }
+    } catch (e) {}
+  }
+  
+  function d7m7StopAllAudio() {
+    d7m7Stop(d7m7Audio);
+    d7m7Stop(d7m7FeedbackAudio);
+  }
+  
+  function d7m7UpdateScore() {
+    const total = d7m7Score.correct + d7m7Score.incorrect;
+    d7m7Correct.textContent = d7m7Score.correct;
+    d7m7Incorrect.textContent = d7m7Score.incorrect;
+    d7m7Total.textContent = total;
+    d7m7Accuracy.textContent = total ? ((d7m7Score.correct / total) * 100).toFixed(1) + '%' : '0.0%';
+  }
+  
+  function d7m7SetFeedback(text) {
+    d7m7Feedback.textContent = text;
+  }
+  
+  function d7m7EnableAnswers(enable) {
+    d7m7AnsDomBtn.disabled = !enable;
+    d7m7AnsMajBtn.disabled = !enable;
+    d7m7AnsDomBtn.classList.remove('correct', 'incorrect');
+    d7m7AnsMajBtn.classList.remove('correct', 'incorrect');
+  }
+  
+  function d7m7RandomInt(max) {
+    return Math.floor(Math.random() * max) + 1;
+  }
+  
+  function d7m7PickNew() {
+    d7m7Locked = false;
+    d7m7SetFeedback('Awaiting your answer...');
+    d7m7EnableAnswers(true);
+  
+    // choose type & file
+    if (Math.random() < 0.5) {
+      d7m7CurrentType = 'dom';
+      d7m7CurrentFile = `dominant7th${d7m7RandomInt(18)}.mp3`;
+    } else {
+      d7m7CurrentType = 'maj';
+      d7m7CurrentFile = `major7th${d7m7RandomInt(18)}.mp3`;
+    }
+  
+    d7m7PlayBtn.disabled = false;
+    d7m7NextBtn.disabled = true;
+    d7m7NextBtn.classList.remove('pop-animation');
+  }
+
+  function d7m7HandleAnswer(choice) { // 'dom' or 'maj'
+    if (d7m7Locked) return;
+    d7m7Locked = true;
+    d7m7EnableAnswers(false);
+    d7m7PlayBtn.disabled = true;
+  
+    d7m7StopAllAudio();
+  
+    const correct = (choice === d7m7CurrentType);
+    if (correct) {
+      d7m7Score.correct++;
+      (choice === 'dom' ? d7m7AnsDomBtn : d7m7AnsMajBtn).classList.add('correct');
+      d7m7SetFeedback(
+        d7m7CurrentType === 'dom'
+          ? 'Correct! ✅ That was a dominant 7th chord!'
+          : 'Correct! ✅ That was a major 7th chord!'
+      );
+      d7m7FeedbackAudio.src = 'audio/correct1.mp3'; // you already use these in MOS
+    } else {
+      d7m7Score.incorrect++;
+      (choice === 'dom' ? d7m7AnsDomBtn : d7m7AnsMajBtn).classList.add('incorrect');
+      d7m7SetFeedback(
+        d7m7CurrentType === 'dom'
+          ? 'Incorrect! ❌ That was a dominant 7th chord!'
+          : 'Incorrect! ❌ That was a major 7th chord!'
+      );
+      d7m7FeedbackAudio.src = 'audio/incorrect1.mp3';
+    }
+    d7m7FeedbackAudio.play();
+  
+    d7m7UpdateScore();
+    d7m7NextBtn.disabled = false;
+    d7m7NextBtn.classList.add('pop-animation');
+  }
+  
+  // Event listeners
+  d7m7PlayBtn && d7m7PlayBtn.addEventListener('click', d7m7PlayCurrent);
+  d7m7NextBtn && d7m7NextBtn.addEventListener('click', () => {
+    d7m7StopAllAudio();
+    d7m7PickNew();      // new random dominant/major 7th
+    d7m7PlayCurrent();  // play immediately
+  });
+  
+  d7m7AnsDomBtn && d7m7AnsDomBtn.addEventListener('click', () => d7m7HandleAnswer('dom'));
+  d7m7AnsMajBtn && d7m7AnsMajBtn.addEventListener('click', () => d7m7HandleAnswer('maj'));
+  
+  // Reference examples
+  d7m7RefDomBtn && d7m7RefDomBtn.addEventListener('click', () => {
+    d7m7StopAllAudio();
+    d7m7Audio.src = 'audio/dominant7threference.mp3';
+    d7m7Audio.play();
+  });
+  
+  d7m7RefMajBtn && d7m7RefMajBtn.addEventListener('click', () => {
+    d7m7StopAllAudio();
+    d7m7Audio.src = 'audio/major7threference.mp3';
+    d7m7Audio.play();
+  });
+  
+  // Score reset
+  d7m7Reset && d7m7Reset.addEventListener('click', () => {
+    d7m7Score.correct = 0;
+    d7m7Score.incorrect = 0;
+    d7m7UpdateScore();
+  });
+  
+  // Navigation from main menu -> intro screen
+d7m7MenuBtn && d7m7MenuBtn.addEventListener('click', () => {
+  hideAllScreens();
+  d7m7IntroScreen.classList.remove('hidden');
+  window.scrollTo(0, 0);
+});
+
+  
+  d7m7HomeBtn && d7m7HomeBtn.addEventListener('click', () => {
+    d7m7StopAllAudio();
+    hideAllScreens();
+    document.getElementById('main-menu').classList.remove('hidden');
+    window.scrollTo(0, 0);
+  });
+  
+  
+  function d7m7PlayCurrent() {
+    d7m7StopAllAudio();
+    d7m7Audio.src = `audio/${encodeURIComponent(d7m7CurrentFile)}`;
+    d7m7Audio.play();
+  }
+  
   
   function updateReallyQuickScoreDisplay() {
     const total = reallyQuickScore.correct + reallyQuickScore.incorrect;
@@ -1512,6 +2114,35 @@ document.getElementById('chord-detail-feedback').textContent =
   
     return `chord${formattedRoot}${quality.toLowerCase()}.mp3`;
   }
+
+  // Intro page actions
+d7m7BeginBtn && d7m7BeginBtn.addEventListener('click', () => {
+  hideAllScreens();
+  d7m7Screen.classList.remove('hidden');
+  window.scrollTo(0, 0);
+  d7m7PickNew();      // choose a new random dom/maj file
+  d7m7PlayCurrent();  // and play it immediately
+});
+
+d7m7IntroHomeBtn && d7m7IntroHomeBtn.addEventListener('click', () => {
+  d7m7StopAllAudio();
+  hideAllScreens();
+  document.getElementById('main-menu').classList.remove('hidden');
+  window.scrollTo(0, 0);
+});
+
+d7m7IntroRefDom && d7m7IntroRefDom.addEventListener('click', () => {
+  d7m7StopAllAudio();
+  d7m7Audio.src = 'audio/dominant7threference.mp3';
+  d7m7Audio.play();
+});
+
+d7m7IntroRefMaj && d7m7IntroRefMaj.addEventListener('click', () => {
+  d7m7StopAllAudio();
+  d7m7Audio.src = 'audio/major7threference.mp3';
+  d7m7Audio.play();
+});
+
   
   function updateChordVisualScore() {
     const total = chordVisualScore.correct + chordVisualScore.incorrect;
@@ -1705,7 +2336,7 @@ playRefBtn.addEventListener('click', handleReferenceNoteClick);
     window.scrollTo(0, 0);
   });
   
-  reallyQuickBtn.addEventListener('click', () => {
+  if (reallyQuickBtn) reallyQuickBtn.addEventListener('click', () => {
     hideAllScreens();
     reallyQuickSelectScreen.classList.remove('hidden');
     window.scrollTo(0, 0);
@@ -1718,24 +2349,55 @@ playRefBtn.addEventListener('click', handleReferenceNoteClick);
     });
   });
   
-  document.getElementById('back-to-home-from-really-quick').addEventListener('click', () => {
+  const __bthr = document.getElementById('back-to-home-from-really-quick');
+  if (__bthr) __bthr.addEventListener('click', () => {
     hideAllScreens();
     document.getElementById('main-menu').classList.remove('hidden');
   });
   
-  document.getElementById('back-to-really-quick-select').addEventListener('click', () => {
+  const __btrqs = document.getElementById('back-to-really-quick-select');
+  if (__btrqs) __btrqs.addEventListener('click', () => {
     hideAllScreens();
     reallyQuickSelectScreen.classList.remove('hidden');
   });
   
-  playReallyQuickBtn.addEventListener('click', () => {
+  if (playReallyQuickBtn) playReallyQuickBtn.addEventListener('click', () => {
     playNote(`realbounce${currentReallyQuickAnswer}`);
   });
   
-  nextReallyQuickBtn.addEventListener('click', () => {
+  if (nextReallyQuickBtn) nextReallyQuickBtn.addEventListener('click', () => {
     generateReallyQuickRound(currentReallyQuickAnswer > 20 ? 28 : currentReallyQuickAnswer);
   });
   
+  // From intro -> More Information page (and play select1.mp3)
+d7m7MoreInfoBtn && d7m7MoreInfoBtn.addEventListener('click', () => {
+  // stop any game audio if you have a helper for that
+  if (typeof d7m7StopAllAudio === 'function') d7m7StopAllAudio();
+
+  playUiSound('select1.mp3');
+  hideAllScreens();
+  d7m7StructureScreen.classList.remove('hidden');
+  window.scrollTo(0, 0);
+});
+
+// More Information page -> Home
+d7m7StructureHomeBtn && d7m7StructureHomeBtn.addEventListener('click', () => {
+  if (typeof d7m7StopAllAudio === 'function') d7m7StopAllAudio();
+  hideAllScreens();
+  document.getElementById('main-menu').classList.remove('hidden');
+  window.scrollTo(0, 0);
+});
+
+// More Information page -> Back (to intro) and play back1.mp3
+d7m7StructureBackBtn && d7m7StructureBackBtn.addEventListener('click', () => {
+  if (typeof d7m7StopAllAudio === 'function') d7m7StopAllAudio();
+
+  playUiSound('back1.mp3');
+  hideAllScreens();
+  d7m7IntroScreen.classList.remove('hidden');
+  window.scrollTo(0, 0);
+});
+
 
   backButton.addEventListener('click', () => {
     gameScreen.classList.add('hidden');
@@ -1783,7 +2445,8 @@ if (allChordsBtn) allChordsBtn.remove();
     window.scrollTo(0, 0);
   });
 
-  document.getElementById('back-to-home-from-quick').addEventListener('click', () => {
+  const __bthq = document.getElementById('back-to-home-from-quick');
+  if (__bthq) __bthq.addEventListener('click', () => {
     hideAllScreens();
     document.getElementById('main-menu').classList.remove('hidden');
   });
@@ -2070,3 +2733,4 @@ nextCompareBtn.addEventListener('click', () => {
   });
   
 });
+

@@ -632,3 +632,164 @@ body {
   border-radius: 10px;
   background-color: #2196F3;
 }
+/* ===================================== */
+/* Dominant 7th vs Major 7th (D7/M7) NEW */
+/* Dedicated, non-shared button styles   */
+/* ===================================== */
+
+.d7m7-menu-button {
+  background-color: #0882d9;
+  color: #fff;
+  padding: 6px 8px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 2px solid rgba(0,0,0,0);
+  cursor: pointer;
+}
+
+.d7m7-green-button,
+.d7m7-blue-button {
+  white-space: nowrap;
+  padding: 8px 14px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+  max-width: 100%;
+}
+
+.d7m7-green-button {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.d7m7-green-button:disabled {
+  background-color: #9E9E9E;
+  cursor: not-allowed;
+}
+
+.d7m7-blue-button {
+  background-color: #2196F3;
+  color: white;
+}
+
+.d7m7-next-button:disabled {
+  background-color: #BDBDBD;
+  color: white;
+  cursor: not-allowed;
+}
+
+.d7m7-back-button {
+  margin-top: 5px;
+  margin-bottom: 0px;
+}
+
+.d7m7-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.d7m7-ref-buttons {
+  display: flex;
+  grid-auto-rows: auto;
+  gap: 8px;
+  justify-content: center;
+  margin: 10px 0 14px 0;
+}
+
+.d7m7-answer-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  justify-content: center;
+  gap: 8px 12px;
+  margin: 10px 0;
+}
+
+.d7m7-wide {
+  width: 220px;
+  max-width: 100%;
+  text-align: center;
+  white-space: normal;
+}
+
+.d7m7-feedback {
+  min-height: 1.2em;
+  margin-top: 8px;
+  font-size: 16px;
+  color: #333;
+}
+
+/* Optional: a tiny pop when Next enables (uses your global @keyframes pop) */
+.d7m7-next-button.pop-animation {
+  animation: pop 0.3s ease-in-out;
+}
+
+.d7m7-ref2-buttons {
+  display: grid;
+  grid-auto-rows: auto;
+  gap: 8px;
+  justify-content: center;
+  margin: 10px 0 10px 0;
+  margin-top: 20px;
+}
+
+/* ============================= */
+/* Intervals (IVL) – namespaced  */
+/* ============================= */
+.ivl-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.ivl-green-button,
+.ivl-blue-button {
+  white-space: nowrap;
+  padding: 8px 14px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+  max-width: 100%;
+}
+
+.ivl-green-button { background-color: #4CAF50; color: #fff; }
+.ivl-green-button:disabled { background-color: #9E9E9E; cursor: not-allowed; }
+
+.ivl-blue-button { background-color: #2196F3; color: #fff; }
+.ivl-blue-button:disabled { background-color: #BDBDBD; color: #fff; cursor: not-allowed; }
+
+.ivl-next-button {
+  background-color: #4492e5;
+}
+
+.ivl-nav { display: flex; gap: 10px; justify-content: center; margin-bottom: 10px; }
+
+.ivl-adjust { margin-top: 14px; }
+.ivl-adjust-row { display: flex; align-items: center; gap: 10px; justify-content: center; }
+
+/* Keep the vertical grid like your other modes */
+#ivl-answer-buttons .ivl-answer {
+  min-width: 80px;
+  min-height: 30px;
+  max-width: fit-content;
+  padding: 6px 14px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+/* Tiny pop animation (matches your Next button behavior) */
+#ivl-next.pop-animation { animation: pop 0.3s ease-in-out; }
+
+/* Intervals select – nicer touch targets */
+.ivl-mode-button {
+  display: auto;             /* stack vertically (already looks similar to your other menus) */
+  margin: 2px 0;              /* optional space between rows */
+  padding-block: 8px;        /* <-- vertical padding */
+}
+

@@ -16,27 +16,31 @@
         Begin wherever you would like, and have fun!</p>
         <h3>Beginner</h3>
       <button id="compare-mode-btn" class="blue-bold-button">Higher or Lower?</button>
-      <div style="margin-top: 8px;""></div>
-      <button id="major-or-minor-scale-btn" class="blue-bold-button">Major or Minor Scale?</button>
-      <div style="margin-top: 8px;""></div>
+      <div style="margin-top: 8px;"></div>
+      <button id="major-or-minor-scale-btn" class="blue-bold-button">Which Is The Major Scale?</button>
+      <div style="margin-top: 8px;"></div>
       <button id="major-minor-btn" class="blue-bold-button">Major or Minor Chord?</button>
       <div style="margin-top: 8px;"></div>
       <h3>Intermediate</h3>
-      <button id="major-scales-btn" class="blue-bold-button">Notes of the Major Scale</button>
-      <div style="margin-top: 8px;""></div>
-      <button id="quick-counting-btn" class="blue-bold-button">Quick Counting!</button>
-      <div style="margin-top: 8px;""></div>
-      <button id="diatonic-chords-btn" class="blue-bold-button">Diatonic Chords</button>
-      <div style="margin-top: 8px;""></div>
-<h3>Advanced</h3>
-<button id="chromatic-menu-btn" class="blue-bold-button">Chromatic Notes</button>
-      <div style="margin-top: 8px;""></div>
-      <button id="really-quick-counting-btn" class="blue-bold-button">Really Quick Counting!</button>
+      <!-- Intervals (new) -->
+<button id="intervals-menu-btn" class="blue-bold-button">Identifying Musical Intervals</button>
 <div style="margin-top: 8px;"></div>
-<button id="chord-visual-btn" class="blue-bold-button">Chord Visual Quiz</button>
+      <button id="major-scales-btn" class="blue-bold-button">Identifying Diatonic Notes In All Major Scales</button>
+      <div style="margin-top: 8px;"></div>
+      <button id="diatonic-chords-btn" class="blue-bold-button">Identifying Diatonic Chords In All Major Scales</button>
+      <div style="margin-top: 8px;"></div>
+<button id="d7m7-menu-btn" class="d7m7-menu-button">Identifying Dominant 7th And Major 7th Chords</button>
+<h3>Advanced</h3>
+<button id="chromatic-menu-btn" class="blue-bold-button">Identifying Chromatic Notes</button>
+      <div style="margin-top: 8px;"></div>
+      <button id="quick-counting-btn" class="blue-bold-button">Quick Counting!</button>
+      <div style="margin-top: 8px;"></div>
       <div></div>
       <h3>More</h3>
       <button id="about-btn" class="blue-bold-button">About</button>
+      <div style="margin-top: 8px;"></div>
+      <button id="chord-visual-btn" class="blue-bold-button">Chord Visual Quiz</button>
+      <div style="margin-top: 8px;"></div>
     </div>
 
     <div id="majmin-select-screen" class="hidden">
@@ -175,7 +179,7 @@ is 'Ab' - both G# and Ab are the same pitch, we are just labelling them differen
     <h1 class="game-title">The Relative Pitch Game 🎹🎶</h1>
     <button id="back-to-home-from-compare" class="green-button back-button">🏠 Home</button>
     <h2>Higher Or Lower?</h2>
-    <h3></h3>Is the second note higher than, lower than, or the same as the first?</h3>
+    <h3>Is the second note higher than, lower than, or the same as the first?</h3>
     <div></div>
     <button id="play-comparison" class="green-button">Replay Notes</button>
     <button id="next-comparison" class="blue-button next-button no-min-height" disabled>Next</button>
@@ -221,9 +225,9 @@ is 'Ab' - both G# and Ab are the same pitch, we are just labelling them differen
     </p>
     <h2>Select Difficulty</h2>
     <button class="green-button quick-mode-btn" data-max="8">Easy – 1 to 8 Notes</button>
-    <div style="margin-top: 8px;""></div>
+    <div style="margin-top: 8px;"></div>
     <button class="green-button quick-mode-btn" data-max="16">Harder – 1 to 16 Notes</button>
-    <div style="margin-top: 8px;""></div>
+    <div style="margin-top: 8px;"></div>
     <button class="green-button quick-mode-btn" data-max="20">Hardest – 1 to 20 Notes</button>
   </div>
 </div>
@@ -289,6 +293,260 @@ is 'Ab' - both G# and Ab are the same pitch, we are just labelling them differen
   </div>
 </div>
 
+<!-- =============================== -->
+<!-- INTERVALS: INTRO (ivl-intro)   -->
+<!-- =============================== -->
+<div id="ivl-intro" class="hidden">
+  <div class="start-content">
+    <h1 class="game-title">The Relative Pitch Game 🎹🎶</h1>
+
+    <div class="ivl-nav">
+      <button id="ivl-home-from-intro" class="ivl-green-button ivl-back-button">🏠 Home</button>
+    </div>
+
+    <h2 class="game-title">Identifying Musical Intervals</h2>
+    <p>You'll hear two single notes in sequence. The second note will be higher than the first (except for Perfect Unison, where it is the same). Your task is to identify the <em>interval</em> (the distance in semitones) between them.</p>
+
+    <h3 style="margin-top:12px;">Intervals used in this game</h3>
+    <ul style="text-align:left; max-width:420px; margin:8px auto;">
+      <li>Perfect Unison (P1) — 0 semitones</li>
+      <li>Minor Second (m2) — 1 semitone</li>
+      <li>Major Second (M2) — 2 semitones</li>
+      <li>Minor Third (m3) — 3 semitones</li>
+      <li>Major Third (M3) — 4 semitones</li>
+      <li>Perfect Fourth (P4) — 5 semitones</li>
+      <li>Augmented Fourth / Diminished Fifth (Tritone) (A4/d5) — 6 semitones</li>
+      <li>Perfect Fifth (P5) — 7 semitones</li>
+      <li>Minor Sixth (m6) — 8 semitones</li>
+      <li>Major Sixth (M6) — 9 semitones</li>
+      <li>Minor Seventh (m7) — 10 semitones</li>
+      <li>Major Seventh (M7) — 11 semitones</li>
+      <li>Perfect Octave (P8) — 12 semitones</li>
+    </ul>
+
+    <div style="margin-top:14px;">
+      <button id="ivl-begin" class="ivl-green-button">Begin</button>
+    </div>
+  </div>
+</div>
+
+<!-- ====================================== -->
+<!-- INTERVALS: COUNT SELECT (ivl-select)   -->
+<!-- ====================================== -->
+<div id="ivl-select" class="hidden">
+  <div class="start-content">
+    <h1 class="game-title">The Relative Pitch Game 🎹🎶</h1>
+
+    <div class="ivl-nav">
+      <button id="ivl-home-from-select" class="ivl-green-button ivl-back-button">🏠 Home</button>
+      <button id="ivl-back-to-intro" class="ivl-blue-button ivl-back-button">⬅ Back</button>
+    </div>
+
+    <h2 class="game-title">Intervals: Select Range</h2>
+    <p>How many intervals should be included? (You can change this in-game.)</p>
+
+    <div style="margin-top:8px;">
+      <button class="ivl-green-button ivl-mode-button" data-count="3">First 3 intervals</button>
+      <button class="ivl-green-button ivl-mode-button" data-count="4">First 4 intervals</button>
+      <button class="ivl-green-button ivl-mode-button" data-count="5">First 5 intervals</button>
+      <button class="ivl-green-button ivl-mode-button" data-count="6">First 6 intervals</button>
+      <button class="ivl-green-button ivl-mode-button" data-count="7">First 7 intervals</button>
+      <button class="ivl-green-button ivl-mode-button" data-count="9">First 9 intervals</button>
+      <button class="ivl-green-button ivl-mode-button" data-count="11">First 11 intervals</button>
+      <button class="ivl-green-button ivl-mode-button" data-count="13">All 13 intervals</button>
+    </div>
+  </div>
+</div>
+
+<!-- =============================== -->
+<!-- INTERVALS: GAME (ivl-game)     -->
+<!-- =============================== -->
+<div id="ivl-game" class="hidden">
+  <div class="start-content">
+    <h1 class="game-title">The Relative Pitch Game 🎹🎶</h1>
+
+    <div class="ivl-nav">
+      <button id="ivl-home-from-game" class="ivl-green-button ivl-back-button">🏠 Home</button>
+      <button id="ivl-back-to-select" class="ivl-blue-button ivl-back-button">⬅ Back</button>
+    </div>
+
+    <h2 class="game-title">Identifying Musical Intervals</h2>
+
+    <div class="ivl-controls">
+      <button id="ivl-play" class="ivl-green-button">Play Interval</button>
+      <button id="ivl-next" class="ivl-blue-button ivl-next-button" disabled>Next</button>
+    </div>
+
+    <p id="ivl-prompt" style="margin-top:6px;">Which interval did you hear?</p>
+
+    <!-- Answer buttons are built dynamically to mirror how other modes build answer sets -->
+    <div id="ivl-answer-buttons" class="vertical-answer-buttons" style="margin-top:10px;"></div>
+
+    <p id="ivl-feedback" style="min-height:1.2em; margin-top:8px;">Awaiting your answer...</p>
+
+    <div class="ivl-adjust">
+      <p>Adjust intervals included:</p>
+      <div class="ivl-adjust-row">
+        <button id="ivl-remove" class="ivl-green-button">➖</button>
+        <span id="ivl-count-label" style="min-width:80px; display:inline-block; text-align:center;">13</span>
+        <button id="ivl-add" class="ivl-green-button">➕</button>
+      </div>
+    </div>
+
+    <div class="scoreboard">
+      <h3>Score:</h3>
+      <p>Correct: <span id="ivl-correct">0</span></p>
+      <p>Incorrect: <span id="ivl-incorrect">0</span></p>
+      <p>Total: <span id="ivl-total">0</span></p>
+      <p>Accuracy: <span id="ivl-accuracy">0.0%</span></p>
+      <button id="ivl-reset" class="ivl-green-button">Reset Score</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- =============================== -->
+<!-- D7/M7 INTRO (new intermediary)  -->
+<!-- =============================== -->
+<div id="d7m7-intro" class="hidden">
+  <div class="start-content">
+    <h1 class="game-title">The Relative Pitch Game 🎹🎶</h1>
+    <button id="d7m7-intro-home" class="d7m7-green-button d7m7-back-button">🏠 Home</button>
+
+    <h2 class="game-title">Identifying Dominant 7th And Major 7th Chords</h2>
+
+    <button id="d7m7-begin" class="d7m7-green-button">Begin Game</button>
+
+    <h3 style="margin-top:16px;">About Dominant 7th And Major 7th Chords:</h3>
+
+    <p>Dominant 7th and major 7th chords are used extensively in Western music, and both chord types have a specific tonality, or sound. You don't have to understand the theory behind what makes a chord a dominant 7th or a major 7th chord to be able to hear and recognise the difference in sound, however the theory is very useful.</p>
+
+    <p>Before the theory, the sound! This is subjective, but typically dominant 7th chords sound as though they are unresolved and ‘want to go somewhere’ - almost like the second to last chord in a song - whereas major 7th chords sound more rested - like the ending chord of a jazz ballad. These different emotional feelings, and moving from one to another, help music tell stories.</p>    
+
+    <p>Below are two chords - the one on the top is a C dominant 7th, and the one below is a C major 7th. Can you hear the difference? Both chords share the same underlying c major triad of c, e and g.</p>
+
+    <div class="d7m7-ref2-buttons">
+      <button id="d7m7-intro-ref-dom" class="d7m7-green-button">Play Dominant 7th Chord (C7)</button>
+      <button id="d7m7-intro-ref-maj" class="d7m7-green-button">Play Major 7th Chord (CMaj7)</button>
+    </div>
+
+    <button id="d7m7-moreinfo" class="d7m7-green-button d7m7-wide">More Information!</button>
+</div>
+</div>
+
+<!-- =============================== -->
+<!-- D7/M7 MORE INFORMATION PAGE     -->
+<!-- =============================== -->
+<div id="d7m7-structure" class="hidden">
+  <div class="start-content">
+    <h1 class="game-title">The Relative Pitch Game 🎹🎶</h1>
+    <div style="margin-bottom: 20;"></div>
+
+    <!-- Top nav buttons -->
+    <div class="nav-buttons" style="display:auto; gap:12px; flex-wrap:wrap; margin-bottom:8px;">
+      <button id="d7m7-structure-home" class="d7m7-green-button d7m7-back-button">🏠 Home</button>
+      <button id="d7m7-structure-back" class="d7m7-blue-button d7m7-back-button">⬅ Back</button>
+    </div>
+    <div style="margin-top: 12;"></div>
+
+    <div style="margin-top: 12;"></div>
+
+    <h2 class="game-title" style="margin-top:12px;">More on the structure of Dominant 7th and Major 7th Chords</h2>
+
+    <!-- Your editable text block goes here -->
+    <div id="d7m7-structure-body" style="margin-top:12px;">
+      <!-- Write your content here -->
+
+      <P>The simplest form of a chord is a 3 note triad, for example c major - notated as just a capital ‘C’ - which uses the notes c, e and g. The note ‘c’ is the root note of the chord, and both ‘e’ and ‘g’ are specific intervals (distances measured in semitones) above the root note ‘c’. In fact 2 notes together are not called a chord, they’re simply an ‘interval’. There are many different intervals each with different names. In our C chord the note ‘e’ is an interval of a ‘major third’ (4 semitones) above ‘c’, and the note ‘g’ is an interval of a ‘perfect fifth’ (7 semitones) above ‘c’. The note ‘g’ here is also a ‘minor 3rd’ (3 semitones) above the note ‘e’.</p>
+
+<p>Intervals can be a lot to take in and they’re absolutely something worth understanding. You don’t necessarily need to know the names for them all, but you should at least understand the concept and be familiar with terms like ‘thirds’, ‘fifths’ and ‘sevenths’ - which brings us neatly back to our 7th chords.</p>
+
+<p>A ‘dominant 7th’ chord has the three notes of the triad followed by the note which is an interval of a ‘minor 7th’ (10 semitones) above the root note - if you don’t want to count up 10 semitones from the root, just take the octave and go down 2 semitones.</p>
+
+<p>So the chord of C (c,e,g) can be made into a C7 (C Dominant 7th) by adding the note 10 semitones above c, which is ‘b♭’. Therefore C7 (C Dominant 7th) contains the notes c, e, g and b♭.</p>
+
+<p>A ‘major 7th’ chord is made in much the same way, except this time we add the note which is an interval of a ‘major 7th’ (11 semitones) above the root note - or again if you don’t want to count 11 semitones up from the root, take the root note’s octave and count 1 semitone down.</p>
+
+<p>So C can become CMaj7 (C Major 7th) by adding the note 11 semitones above ‘c’, which is ‘b’. Therefore CMaj7 contains the notes c, e, g and b. Any of our standard minor or major triads can be made into a dominant 7th or a major 7th chord with the same logic of simply adding the note either a minor 7th interval above the root note (makes a dominant 7th chord) or the note a major 7th above the root note (makes a major 7th chord). Dominant 7th chords are written simply with the addition of a ‘7’, and major 7th chords are written by adding ‘Maj7’ to the chord name.</p>
+
+<p>Examples of major chords in their dominant 7th or major 7th variations could be:<br>
+F7 (F dominant 7th), or FMaj7 (F major 7th)<br>
+G7 (G dominant 7th), GMaj7 (G major 7th)<br>
+C#7 (C# dominant 7th), C#Maj7 (C# major 7th) …</p>
+
+<p>And examples of minor chords in their dominant 7th or major 7th variations could be:</p>
+
+<p>Fm7, FmMaj7<br>
+Bbm7, BbmMaj7<br>
+Am7, AmMaj7</p>
+
+<p>Sometimes the ‘Maj7’ section may be written in brackets, ie ‘Am(Maj7).</p>
+
+<h3>Further notes:</h3>
+
+<p>*There are 7 diatonic triads in each major scale, and each of these can have a single 7th variation, but not two - therefore there are also 7 diatonic 7th chords for each major scale. The reason there can only be one variation is that when we are restricted to only the 7 different notes of a single major scale, for any given root note only either the note an interval of a minor 7th or a major 7th above will be a note from the scale. A working example of this is:</p>
+
+<p>Ie in D Major, the ii chord is Em (E minor, e, g, b), seven notes in the scale of D Major above the root note ‘e’ is ‘d’, so we get the notes ‘e’, ‘g’, ‘b’ and ‘d’. The note ‘d’ is 10 semitones above the root note ‘e’ which is an interval of a minor 7th above the root, which corresponds to a dominant 7th chord, so the ii chord in the key of D Major in it’s 7th variation is Em7. It couldn’t be Em(Maj7) because the note a major 7th (11 semitones) above the root note of ‘e’ would be ‘e♭’, which isn’t a note in the scale of D Major and as such can’t be used for a diatonic chord.</p>
+
+<p>*Minor chords with major 7th notes on top (known as minor major 7ths, ie Am(Maj7)) are rare in Western music because they aren’t diatonic to any of the major scales, and it’s these major scales that form the theoretical foundation to most Western music. That is to say if we stick to making chords restricted to only the notes of a single major scale, ie C Major, none of the 7th chords produced will be minor chords with major 7th notes.</p>
+
+    </div>
+  </div>
+</div>
+
+
+
+<!-- =============================== -->
+<!-- Dominant 7th or Major 7th? NEW -->
+<!-- =============================== -->
+<div id="d7m7-game" class="hidden">
+  <div class="start-content">
+    <h1 class="game-title">The Relative Pitch Game 🎹🎶</h1>
+    <button id="d7m7-home" class="d7m7-green-button d7m7-back-button">🏠 Home</button>
+
+    <h2 class="game-title">Dominant 7th or Major 7th Chord?</h2>
+
+    <p>
+      Click the 'Play Chord' button below - you will hear a recording of either a dominant 7th chord (ie C7), or a major 7th chord (ie CMaj7). You need to decide which it is!
+    </p>
+    <p>Hint! Use the reference buttons below to hear examples of both:</p>
+
+    <!-- Reference buttons (vertically stacked) -->
+    <div class="d7m7-ref-buttons">
+      <button id="d7m7-ref-dom" class="d7m7-green-button">Play Dominant 7th (C7)</button>
+      <button id="d7m7-ref-maj" class="d7m7-green-button">Play Major 7th (CMaj7)</button>
+    </div>
+
+    <!-- Play / Next controls -->
+    <div class="d7m7-controls">
+      <button id="d7m7-play" class="d7m7-green-button">Play Chord</button>
+      <button id="d7m7-next" class="d7m7-blue-button d7m7-next-button" disabled>Next</button>
+    </div>
+
+    <p id="d7m7-question" style="margin-top: 6px;">
+      Was the recording played a dominant 7th chord or a major 7th chord?
+    </p>
+
+    <!-- Answers -->
+    <div id="d7m7-answer-buttons" class="d7m7-answer-buttons">
+      <button id="d7m7-answer-dom" class="d7m7-green-button" data-answer="dom">Dominant 7th</button>
+      <button id="d7m7-answer-maj" class="d7m7-green-button" data-answer="maj">Major 7th</button>
+    </div>
+
+    <p id="d7m7-feedback" class="d7m7-feedback">Awaiting your answer...</p>
+
+    <div class="scoreboard">
+      <h3>Score:</h3>
+      <p>Correct: <span id="d7m7-correct">0</span></p>
+      <p>Incorrect: <span id="d7m7-incorrect">0</span></p>
+      <p>Total: <span id="d7m7-total">0</span></p>
+      <p>Accuracy: <span id="d7m7-accuracy">0.0%</span></p>
+      <button id="d7m7-reset" class="d7m7-green-button">Reset Score</button>
+    </div>
+  </div>
+</div>
+
+
 
 <div id="chord-mode-select" class="hidden">
   <div class="start-content">
@@ -339,7 +597,7 @@ is 'Ab' - both G# and Ab are the same pitch, we are just labelling them differen
     <h1 class="game-title">The Relative Pitch Game 🎹🎶</h1>
     <button id="back-to-home-from-majmin" class="green-button back-button">🏠 Home</button>
     <h2 class="game-title">Major or Minor?</h2>
-    <div style="margin-top: 8px;""></div>
+    <div style="margin-top: 8px;"></div>
     <p>Major and minor chords both have distinct sounds. It can be subjective,
       though generally minor chords sound 'sadder' and major chords sound 'happy', or 'grand'.
     </p>
@@ -383,8 +641,8 @@ is 'Ab' - both G# and Ab are the same pitch, we are just labelling them differen
     <div class="chord-image-wrapper">
       <img id="chord-visual-image" src="" alt="Chord Image">
     </div>
-    <div style="margin-top: 10px;""></div>
-    <div style="margin-top: 8px;""></div>
+    <div style="margin-top: 10px;"></div>
+    <div style="margin-top: 8px;"></div>
     <div id="chord-visual-answers" class="vertical-answer-buttons"></div>
     <button id="next-chord-visual" class="chord-next-button" disabled>Next</button>
     <p id="chord-visual-feedback" style="min-height: 1.2em; margin-top: 8px;">Awaiting your answer...</p>
