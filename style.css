@@ -4,20 +4,6 @@ body {
   background-color: white;
   margin: 0;
   padding: 0;
-  /* 1. Add your image path here */
-  background-image: url('images/background.png'); 
-  
-  /* 2. Make sure it covers the entire screen */
-  background-size: cover; 
-  
-  /* 3. Center the image */
-  background-position: center; 
-  
-  /* 4. Prevent the image from repeating/tiling */
-  background-repeat: no-repeat; 
-  
-  /* 5. Keep the background fixed in place when the user scrolls */
-  background-attachment: fixed;
 }
 
 .container {
